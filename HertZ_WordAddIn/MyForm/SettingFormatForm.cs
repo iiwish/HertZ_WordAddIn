@@ -13,6 +13,10 @@ namespace HertZ_WordAddIn
     public partial class SettingFormatForm : Form
     {
         private System.Drawing.Text.InstalledFontCollection objFont = new System.Drawing.Text.InstalledFontCollection();
+
+        //向我的文档写入配置
+        ClsThisAddinConfig clsConfig = new ClsThisAddinConfig(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments));
+
         public SettingFormatForm()
         {
             InitializeComponent();
@@ -41,10 +45,6 @@ namespace HertZ_WordAddIn
                 new[] { "单倍行距","1.15倍行距","1.5倍行距","2倍行距","2.5倍行距","3倍行距" };
             RowSpace.DataSource = RowSpaceList;
             TableRowSpace.DataSource = RowSpaceList;
-
-            //从我的文档读取配置
-            string strPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments);
-            ClsThisAddinConfig clsConfig = new ClsThisAddinConfig(strPath);
 
             //从父节点SettingFormatForm中读取配置名为FontGroupCheck的值，字体字号复选框，默认为true
             FontGroupCheck.Checked = clsConfig.ReadConfig<bool>("SettingFormatForm", "FontGroupCheck", true);
@@ -100,10 +100,8 @@ namespace HertZ_WordAddIn
         //保存按钮
         private void SaveButton_Click(object sender, EventArgs e)
         {
-
-            //向我的文档写入配置
-            string strPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments);
-            ClsThisAddinConfig clsConfig = new ClsThisAddinConfig(strPath);
+            //验证数据是否有效
+            TestEffect();
 
             //从父节点SettingFormatForm中读取配置名为FontGroupCheck的值，字体字号复选框，默认为true
             clsConfig.WriteConfig("SettingFormatForm", "FontGroupCheck", FontGroupCheck.Checked.ToString());
@@ -156,6 +154,100 @@ namespace HertZ_WordAddIn
             
             //关闭当前窗体
             this.Close();
+        }
+
+        //检查数据是否有效
+        private bool TestEffect()
+        {
+            bool returnValue = true;
+            string msg = "";
+
+            //正文字体
+            if(CnFont.SelectedItem == null) 
+            {
+                CnFont.SelectedItem = clsConfig.ReadConfig<string>("SettingFormatForm", "CnFont", "仿宋_GB2312");
+                msg = "正文字体选择有误,已恢复默认";
+                returnValue = false;
+            }
+
+            //数字字体
+            if (NumFont.SelectedItem == null) 
+            {
+                NumFont.SelectedItem = clsConfig.ReadConfig<string>("SettingFormatForm", "NumFont", "Arial Narrow");
+                if (returnValue)
+                {
+                    msg = "数字字体选择有误,已恢复默认";
+                }
+                else
+                {
+                    msg = msg + Environment.NewLine + "数字字体选择有误,已恢复默认";
+                }
+                returnValue = false;
+            }
+
+            //字号
+            if (FontSize.SelectedItem == null) 
+            {
+                FontSize.SelectedItem = clsConfig.ReadConfig<string>("SettingFormatForm", "FontSize", "小四");
+                if (returnValue)
+                {
+                    msg = "正文字号选择有误,已恢复默认";
+                }
+                else
+                {
+                    msg = msg + Environment.NewLine + "正文字号选择有误,已恢复默认";
+                }
+                returnValue = false;
+            }
+
+            //行间距
+            if (RowSpace.SelectedItem == null) 
+            {
+                RowSpace.SelectedItem = clsConfig.ReadConfig<string>("SettingFormatForm", "RowSpace", "单倍行距");
+                if (returnValue)
+                {
+                    msg = "正文行间距选择有误,已恢复默认";
+                }
+                else
+                {
+                    msg = msg + Environment.NewLine + "正文行间距选择有误,已恢复默认";
+                }
+                returnValue = false;
+            }
+
+            //表格行间距
+            if (TableRowSpace.SelectedItem == null) 
+            {
+                TableRowSpace.SelectedItem = clsConfig.ReadConfig<string>("SettingFormatForm", "TableRowSpace", "单倍行距");
+                if (returnValue)
+                {
+                    msg = "表格行间距选择有误,已恢复默认";
+                }
+                else
+                {
+                    msg = msg + Environment.NewLine + "表格行间距选择有误,已恢复默认";
+                }
+                returnValue = false;
+            }
+
+            //表格字号
+            if (TableFontSize.SelectedItem == null) 
+            {
+                TableFontSize.SelectedItem = clsConfig.ReadConfig<string>("SettingFormatForm", "TableFontSize", "小四");
+                if (returnValue)
+                {
+                    msg = "表格字号选择有误,已恢复默认";
+                }
+                else
+                {
+                    msg = msg + Environment.NewLine + "表格字号选择有误,已恢复默认";
+                }
+                returnValue = false;
+            }
+
+            if (!returnValue) { MessageBox.Show(msg); }
+            //返回值
+            return returnValue;
         }
     }
 }
