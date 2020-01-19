@@ -181,7 +181,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <None Include="HertZ_WordAddIn_TemporaryKey.pfx" />
+    <None Include="HeWish.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -216,10 +216,10 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>HertZ_WordAddIn_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>HeWish.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>7934A1174D909B87D977AAA27DC9100742380361</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>9612E574947ED616C014DDCA91EAA2591B0470F1</ManifestCertificateThumbprint>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

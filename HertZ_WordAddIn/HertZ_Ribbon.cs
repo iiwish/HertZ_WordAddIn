@@ -26,7 +26,7 @@ namespace HertZ_WordAddIn
         private void TextFormat_Click(object sender, RibbonControlEventArgs e)
         {
             WordApp = Globals.ThisAddIn.Application;
-            WordDoc = (Word.Document)WordApp.ActiveDocument;
+            WordDoc = WordApp.ActiveDocument;
 
 
         }
