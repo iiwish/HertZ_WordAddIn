@@ -13,8 +13,8 @@ namespace HertZ_WordAddIn
     public partial class SettingFormatForm : Form
     {
         private System.Drawing.Text.InstalledFontCollection objFont = new System.Drawing.Text.InstalledFontCollection();
-
-        //向我的文档写入配置
+        
+        //定义配置文件
         ClsThisAddinConfig clsConfig = new ClsThisAddinConfig(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments));
 
         public SettingFormatForm()
@@ -38,13 +38,19 @@ namespace HertZ_WordAddIn
                    "小五", "六号", "小六","七号","八号","5","5.5","6.5","7.5","8","9","10","10.5","11",
                    "12","14","16","18","20","22","24","26","28","36","48","72" };
             FontSize.DataSource = FontSizeList;
-            TableFontSize.DataSource = FontSizeList;
+            string[] TableFontSizeList =
+                new[]{ "初号", "小初", "一号","小一","二号","小二","三号","小三","四号","小四","五号",
+                   "小五", "六号", "小六","七号","八号","5","5.5","6.5","7.5","8","9","10","10.5","11",
+                   "12","14","16","18","20","22","24","26","28","36","48","72" };
+            TableFontSize.DataSource = TableFontSizeList;
 
             //设置行距选项
             string[] RowSpaceList =
                 new[] { "单倍行距","1.15倍行距","1.5倍行距","2倍行距","2.5倍行距","3倍行距" };
             RowSpace.DataSource = RowSpaceList;
-            TableRowSpace.DataSource = RowSpaceList;
+            string[] TableRowSpaceList =
+                new[] { "单倍行距", "1.15倍行距", "1.5倍行距", "2倍行距", "2.5倍行距", "3倍行距" };
+            TableRowSpace.DataSource = TableRowSpaceList;
 
             //从父节点SettingFormatForm中读取配置名为FontGroupCheck的值，字体字号复选框，默认为true
             FontGroupCheck.Checked = clsConfig.ReadConfig<bool>("SettingFormatForm", "FontGroupCheck", true);

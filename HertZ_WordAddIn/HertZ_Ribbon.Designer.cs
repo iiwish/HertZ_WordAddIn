@@ -76,6 +76,7 @@
             this.TableFormat.ScreenTip = "按照设置好的格式调整当前表格格式";
             this.TableFormat.ShowImage = true;
             this.TableFormat.SuperTip = "请在使用前先设置好默认样式";
+            this.TableFormat.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.TableFormat_Click);
             // 
             // SettingFormat
             // 

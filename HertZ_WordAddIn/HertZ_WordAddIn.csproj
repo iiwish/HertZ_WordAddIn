@@ -163,11 +163,21 @@
     <Compile Include="HertZ_Ribbon.Designer.cs">
       <DependentUpon>HertZ_Ribbon.cs</DependentUpon>
     </Compile>
+    <Compile Include="MainCode\FormatFunC.cs" />
+    <Compile Include="MyForm\MyProcessBar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MyForm\MyProcessBar.Designer.cs">
+      <DependentUpon>MyProcessBar.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
     <EmbeddedResource Include="HertZ_Ribbon.resx">
       <DependentUpon>HertZ_Ribbon.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MyForm\MyProcessBar.resx">
+      <DependentUpon>MyProcessBar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MyForm\SettingFormatForm.resx">
       <DependentUpon>SettingFormatForm.cs</DependentUpon>
@@ -207,7 +217,6 @@
     </Compile>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

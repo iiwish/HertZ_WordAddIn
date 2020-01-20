@@ -51,6 +51,7 @@
             this.FontGroupCheck = new System.Windows.Forms.CheckBox();
             this.TableFormat = new System.Windows.Forms.TabPage();
             this.OtherGroup = new System.Windows.Forms.GroupBox();
+            this.OtherGroupCheck = new System.Windows.Forms.CheckBox();
             this.TableFontSize = new System.Windows.Forms.ComboBox();
             this.TableFontSizeL = new System.Windows.Forms.Label();
             this.TableTitleWiderCheck = new System.Windows.Forms.CheckBox();
@@ -69,7 +70,6 @@
             this.TableRowSpace = new System.Windows.Forms.ComboBox();
             this.TableRowSpaceL = new System.Windows.Forms.Label();
             this.SaveButton = new System.Windows.Forms.Button();
-            this.OtherGroupCheck = new System.Windows.Forms.CheckBox();
             this.SettingFormat.SuspendLayout();
             this.TextFormat.SuspendLayout();
             this.TitleGroup.SuspendLayout();
@@ -343,6 +343,17 @@
             this.OtherGroup.TabIndex = 6;
             this.OtherGroup.TabStop = false;
             // 
+            // OtherGroupCheck
+            // 
+            this.OtherGroupCheck.AutoSize = true;
+            this.OtherGroupCheck.BackColor = System.Drawing.Color.White;
+            this.OtherGroupCheck.Location = new System.Drawing.Point(6, 0);
+            this.OtherGroupCheck.Name = "OtherGroupCheck";
+            this.OtherGroupCheck.Size = new System.Drawing.Size(94, 35);
+            this.OtherGroupCheck.TabIndex = 4;
+            this.OtherGroupCheck.Text = "其他";
+            this.OtherGroupCheck.UseVisualStyleBackColor = false;
+            // 
             // TableFontSize
             // 
             this.TableFontSize.Font = new System.Drawing.Font("微软雅黑", 7.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -544,20 +555,9 @@
             this.SaveButton.Name = "SaveButton";
             this.SaveButton.Size = new System.Drawing.Size(150, 50);
             this.SaveButton.TabIndex = 2;
-            this.SaveButton.Text = "保  存";
+            this.SaveButton.Text = "保 存";
             this.SaveButton.UseVisualStyleBackColor = true;
             this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
-            // 
-            // OtherGroupCheck
-            // 
-            this.OtherGroupCheck.AutoSize = true;
-            this.OtherGroupCheck.BackColor = System.Drawing.Color.White;
-            this.OtherGroupCheck.Location = new System.Drawing.Point(6, 0);
-            this.OtherGroupCheck.Name = "OtherGroupCheck";
-            this.OtherGroupCheck.Size = new System.Drawing.Size(94, 35);
-            this.OtherGroupCheck.TabIndex = 4;
-            this.OtherGroupCheck.Text = "其他";
-            this.OtherGroupCheck.UseVisualStyleBackColor = false;
             // 
             // SettingFormatForm
             // 
