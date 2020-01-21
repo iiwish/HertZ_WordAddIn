@@ -31,6 +31,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingFormatForm));
             this.SettingFormat = new System.Windows.Forms.TabControl();
             this.TextFormat = new System.Windows.Forms.TabPage();
+            this.SkipPgs = new System.Windows.Forms.NumericUpDown();
+            this.SkipPgsL = new System.Windows.Forms.Label();
             this.TitleGroup = new System.Windows.Forms.GroupBox();
             this.RowSpace = new System.Windows.Forms.ComboBox();
             this.RowSpaceL = new System.Windows.Forms.Label();
@@ -70,10 +72,9 @@
             this.TableRowSpace = new System.Windows.Forms.ComboBox();
             this.TableRowSpaceL = new System.Windows.Forms.Label();
             this.SaveButton = new System.Windows.Forms.Button();
-            this.SkipPgsL = new System.Windows.Forms.Label();
-            this.SkipPgs = new System.Windows.Forms.NumericUpDown();
             this.SettingFormat.SuspendLayout();
             this.TextFormat.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SkipPgs)).BeginInit();
             this.TitleGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AfterMainBody)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BeforeMainBody)).BeginInit();
@@ -84,7 +85,6 @@
             this.SpaceGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TableAfterMainBody)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TableBeforeMainBody)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.SkipPgs)).BeginInit();
             this.SuspendLayout();
             // 
             // SettingFormat
@@ -114,6 +114,24 @@
             this.TextFormat.TabIndex = 1;
             this.TextFormat.Text = "文字排版";
             this.TextFormat.UseVisualStyleBackColor = true;
+            // 
+            // SkipPgs
+            // 
+            this.SkipPgs.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.SkipPgs.Font = new System.Drawing.Font("微软雅黑", 7.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.SkipPgs.Location = new System.Drawing.Point(294, 490);
+            this.SkipPgs.Name = "SkipPgs";
+            this.SkipPgs.Size = new System.Drawing.Size(80, 35);
+            this.SkipPgs.TabIndex = 3;
+            // 
+            // SkipPgsL
+            // 
+            this.SkipPgsL.AutoSize = true;
+            this.SkipPgsL.Location = new System.Drawing.Point(71, 492);
+            this.SkipPgsL.Name = "SkipPgsL";
+            this.SkipPgsL.Size = new System.Drawing.Size(238, 31);
+            this.SkipPgsL.TabIndex = 2;
+            this.SkipPgsL.Text = "格式调整跳过(段）：";
             // 
             // TitleGroup
             // 
@@ -565,24 +583,6 @@
             this.SaveButton.UseVisualStyleBackColor = true;
             this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
-            // SkipPgsL
-            // 
-            this.SkipPgsL.AutoSize = true;
-            this.SkipPgsL.Location = new System.Drawing.Point(71, 492);
-            this.SkipPgsL.Name = "SkipPgsL";
-            this.SkipPgsL.Size = new System.Drawing.Size(238, 31);
-            this.SkipPgsL.TabIndex = 2;
-            this.SkipPgsL.Text = "格式调整跳过(段）：";
-            // 
-            // SkipPgs
-            // 
-            this.SkipPgs.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.SkipPgs.Font = new System.Drawing.Font("微软雅黑", 7.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.SkipPgs.Location = new System.Drawing.Point(294, 490);
-            this.SkipPgs.Name = "SkipPgs";
-            this.SkipPgs.Size = new System.Drawing.Size(80, 35);
-            this.SkipPgs.TabIndex = 3;
-            // 
             // SettingFormatForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(14F, 31F);
@@ -596,10 +596,12 @@
             this.Name = "SettingFormatForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "设置默认样式";
+            this.TopMost = true;
             this.Load += new System.EventHandler(this.SettingFormatForm_Load);
             this.SettingFormat.ResumeLayout(false);
             this.TextFormat.ResumeLayout(false);
             this.TextFormat.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SkipPgs)).EndInit();
             this.TitleGroup.ResumeLayout(false);
             this.TitleGroup.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AfterMainBody)).EndInit();
@@ -615,7 +617,6 @@
             this.SpaceGroup.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TableAfterMainBody)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TableBeforeMainBody)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.SkipPgs)).EndInit();
             this.ResumeLayout(false);
 
         }

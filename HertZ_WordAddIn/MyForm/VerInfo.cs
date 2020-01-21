@@ -32,7 +32,7 @@ namespace HertZ_WordAddIn
 
         private void Manual_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("https://www.jianshu.com/nb/41200586");
+            System.Diagnostics.Process.Start("https://www.jianshu.com/nb/42169573");
         }
 
         private void OnlineVideo_Click(object sender, EventArgs e)

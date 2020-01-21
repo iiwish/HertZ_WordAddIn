@@ -38,7 +38,7 @@
             // Manual
             // 
             this.Manual.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Manual.Location = new System.Drawing.Point(285, 300);
+            this.Manual.Location = new System.Drawing.Point(272, 300);
             this.Manual.Name = "Manual";
             this.Manual.Size = new System.Drawing.Size(150, 50);
             this.Manual.TabIndex = 0;

@@ -218,6 +218,7 @@ namespace HertZ_WordAddIn
                             WordApp.Selection.ParagraphFormat.CharacterUnitLeftIndent = 0;
                             WordApp.Selection.ParagraphFormat.CharacterUnitRightIndent = 0;
                             WordApp.Selection.ParagraphFormat.CharacterUnitFirstLineIndent = 0;
+                            WordApp.Selection.ParagraphFormat.FirstLineIndent = WordApp.CentimetersToPoints(0);
                         }
                         WordApp.Selection.ParagraphFormat.SpaceBefore = 0;
                         WordApp.Selection.ParagraphFormat.LineUnitBefore = float.Parse(TableBeforeMainBody.ToString());
