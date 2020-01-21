@@ -70,6 +70,8 @@
             this.TableRowSpace = new System.Windows.Forms.ComboBox();
             this.TableRowSpaceL = new System.Windows.Forms.Label();
             this.SaveButton = new System.Windows.Forms.Button();
+            this.SkipPgsL = new System.Windows.Forms.Label();
+            this.SkipPgs = new System.Windows.Forms.NumericUpDown();
             this.SettingFormat.SuspendLayout();
             this.TextFormat.SuspendLayout();
             this.TitleGroup.SuspendLayout();
@@ -82,6 +84,7 @@
             this.SpaceGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TableAfterMainBody)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TableBeforeMainBody)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SkipPgs)).BeginInit();
             this.SuspendLayout();
             // 
             // SettingFormat
@@ -94,18 +97,20 @@
             this.SettingFormat.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.SettingFormat.Name = "SettingFormat";
             this.SettingFormat.SelectedIndex = 0;
-            this.SettingFormat.Size = new System.Drawing.Size(674, 535);
+            this.SettingFormat.Size = new System.Drawing.Size(674, 580);
             this.SettingFormat.TabIndex = 1;
             // 
             // TextFormat
             // 
+            this.TextFormat.Controls.Add(this.SkipPgs);
+            this.TextFormat.Controls.Add(this.SkipPgsL);
             this.TextFormat.Controls.Add(this.TitleGroup);
             this.TextFormat.Controls.Add(this.FontGroup);
             this.TextFormat.Location = new System.Drawing.Point(8, 45);
             this.TextFormat.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.TextFormat.Name = "TextFormat";
             this.TextFormat.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.TextFormat.Size = new System.Drawing.Size(658, 482);
+            this.TextFormat.Size = new System.Drawing.Size(658, 527);
             this.TextFormat.TabIndex = 1;
             this.TextFormat.Text = "文字排版";
             this.TextFormat.UseVisualStyleBackColor = true;
@@ -149,7 +154,7 @@
             // AfterMainBody
             // 
             this.AfterMainBody.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.AfterMainBody.DecimalPlaces = 2;
+            this.AfterMainBody.DecimalPlaces = 1;
             this.AfterMainBody.Font = new System.Drawing.Font("微软雅黑", 7.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.AfterMainBody.Increment = new decimal(new int[] {
             5,
@@ -178,7 +183,7 @@
             // BeforeMainBody
             // 
             this.BeforeMainBody.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.BeforeMainBody.DecimalPlaces = 2;
+            this.BeforeMainBody.DecimalPlaces = 1;
             this.BeforeMainBody.Font = new System.Drawing.Font("微软雅黑", 7.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.BeforeMainBody.Increment = new decimal(new int[] {
             5,
@@ -324,7 +329,7 @@
             this.TableFormat.Location = new System.Drawing.Point(8, 45);
             this.TableFormat.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.TableFormat.Name = "TableFormat";
-            this.TableFormat.Size = new System.Drawing.Size(658, 482);
+            this.TableFormat.Size = new System.Drawing.Size(658, 527);
             this.TableFormat.TabIndex = 2;
             this.TableFormat.Text = "表格排版";
             this.TableFormat.UseVisualStyleBackColor = true;
@@ -381,6 +386,7 @@
             this.TableTitleWiderCheck.TabIndex = 1;
             this.TableTitleWiderCheck.Text = "标题及合计行加粗";
             this.TableTitleWiderCheck.UseVisualStyleBackColor = true;
+            this.TableTitleWiderCheck.Visible = false;
             // 
             // TableVerticalCenterCheck
             // 
@@ -455,7 +461,7 @@
             // TableAfterMainBody
             // 
             this.TableAfterMainBody.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.TableAfterMainBody.DecimalPlaces = 2;
+            this.TableAfterMainBody.DecimalPlaces = 1;
             this.TableAfterMainBody.Font = new System.Drawing.Font("微软雅黑", 7.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.TableAfterMainBody.Increment = new decimal(new int[] {
             5,
@@ -475,7 +481,7 @@
             // TableBeforeMainBody
             // 
             this.TableBeforeMainBody.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.TableBeforeMainBody.DecimalPlaces = 2;
+            this.TableBeforeMainBody.DecimalPlaces = 1;
             this.TableBeforeMainBody.Font = new System.Drawing.Font("微软雅黑", 7.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.TableBeforeMainBody.Increment = new decimal(new int[] {
             5,
@@ -551,7 +557,7 @@
             // 
             // SaveButton
             // 
-            this.SaveButton.Location = new System.Drawing.Point(260, 560);
+            this.SaveButton.Location = new System.Drawing.Point(255, 594);
             this.SaveButton.Name = "SaveButton";
             this.SaveButton.Size = new System.Drawing.Size(150, 50);
             this.SaveButton.TabIndex = 2;
@@ -559,11 +565,29 @@
             this.SaveButton.UseVisualStyleBackColor = true;
             this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
+            // SkipPgsL
+            // 
+            this.SkipPgsL.AutoSize = true;
+            this.SkipPgsL.Location = new System.Drawing.Point(71, 492);
+            this.SkipPgsL.Name = "SkipPgsL";
+            this.SkipPgsL.Size = new System.Drawing.Size(238, 31);
+            this.SkipPgsL.TabIndex = 2;
+            this.SkipPgsL.Text = "格式调整跳过(段）：";
+            // 
+            // SkipPgs
+            // 
+            this.SkipPgs.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.SkipPgs.Font = new System.Drawing.Font("微软雅黑", 7.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.SkipPgs.Location = new System.Drawing.Point(294, 490);
+            this.SkipPgs.Name = "SkipPgs";
+            this.SkipPgs.Size = new System.Drawing.Size(80, 35);
+            this.SkipPgs.TabIndex = 3;
+            // 
             // SettingFormatForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(14F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(674, 629);
+            this.ClientSize = new System.Drawing.Size(674, 665);
             this.Controls.Add(this.SaveButton);
             this.Controls.Add(this.SettingFormat);
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -575,6 +599,7 @@
             this.Load += new System.EventHandler(this.SettingFormatForm_Load);
             this.SettingFormat.ResumeLayout(false);
             this.TextFormat.ResumeLayout(false);
+            this.TextFormat.PerformLayout();
             this.TitleGroup.ResumeLayout(false);
             this.TitleGroup.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AfterMainBody)).EndInit();
@@ -590,6 +615,7 @@
             this.SpaceGroup.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TableAfterMainBody)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TableBeforeMainBody)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SkipPgs)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -637,5 +663,7 @@
         private System.Windows.Forms.ComboBox TableFontSize;
         private System.Windows.Forms.Label TableFontSizeL;
         private System.Windows.Forms.CheckBox OtherGroupCheck;
+        private System.Windows.Forms.NumericUpDown SkipPgs;
+        private System.Windows.Forms.Label SkipPgsL;
     }
 }

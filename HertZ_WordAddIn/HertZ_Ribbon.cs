@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Microsoft.Office.Tools.Ribbon;
 using Word = Microsoft.Office.Interop.Word;
 using System.Threading;
+using Microsoft.VisualBasic;
 
 namespace HertZ_WordAddIn
 {
@@ -16,6 +17,7 @@ namespace HertZ_WordAddIn
 
         //引入调整格式用的函数模块
         private readonly FormatFunC FormatFunC = new FormatFunC();
+        private readonly GlobalFunC FunC = new GlobalFunC();
 
         //用于显示进度条窗体
         private delegate bool IncreaseHandle(int nValue);
@@ -32,8 +34,13 @@ namespace HertZ_WordAddIn
         /// <param name="e"></param>
         private void TextFormat_Click(object sender, RibbonControlEventArgs e)
         {
+            //弹出窗体提示
+            DialogResult IsWait = MessageBox.Show("如果文本行较多运行较为缓慢，进度可在Word左下角查看" + Environment.NewLine + "是否继续？", "请选择", MessageBoxButtons.YesNo);
+            if(IsWait != DialogResult.Yes) { return; }
+
             WordApp = Globals.ThisAddIn.Application;
             WordDoc = WordApp.ActiveDocument;
+
 
             WordApp.ScreenUpdating = false;//关闭屏幕刷新
 
@@ -53,7 +60,8 @@ namespace HertZ_WordAddIn
             decimal BeforeMainBody = clsConfig.ReadConfig<decimal>("SettingFormatForm", "BeforeMainBody", 0m);
             decimal AfterMainBody = clsConfig.ReadConfig<decimal>("SettingFormatForm", "AfterMainBody", 0.9m);
             decimal RowSpace = FormatFunC.RowSpace(clsConfig.ReadConfig<string>("SettingFormatForm", "RowSpace", "单倍行距"));
-
+            //跳过的段落数
+            int SkipPgNum = FunC.TI(clsConfig.ReadConfig<decimal>("SettingFormatForm", "SkipPgs", 0m));
 
             //段落大纲级别
             Word.WdOutlineLevel PgLevel;
@@ -73,9 +81,11 @@ namespace HertZ_WordAddIn
                     WordApp.Selection.Font.Name = NumFont;
                 }
 
-                int i4 = 1;
+                int i4 = 0;
                 foreach (Word.Paragraph Pg in WordDoc.Paragraphs)
                 {
+                    i4++;
+                    if(i4 <= SkipPgNum ) { continue; }
                     if (Pg.Range.Information[Word.WdInformation.wdWithInTable]) { continue; }
                     PgLevel = Pg.OutlineLevel;
 
@@ -83,9 +93,11 @@ namespace HertZ_WordAddIn
                     if (TitleGroupCheck)
                     {
                         //段前间距
-                        Pg.SpaceBefore = float.Parse(BeforeMainBody.ToString());
+                        Pg.SpaceBefore = 0;
+                        Pg.LineUnitBefore = float.Parse(BeforeMainBody.ToString());
                         //段后间距
-                        Pg.SpaceAfter = float.Parse(AfterMainBody.ToString());
+                        Pg.SpaceAfter = 0;
+                        Pg.LineUnitAfter = float.Parse(AfterMainBody.ToString());
                         //段落行间距
                         Pg.LineSpacing = WordApp.LinesToPoints(float.Parse(RowSpace.ToString()));
                     }
@@ -106,16 +118,31 @@ namespace HertZ_WordAddIn
                                 Pg.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
                                 Pg.CharacterUnitLeftIndent = -2;
                             }
-                            if (PgLevel == Word.WdOutlineLevel.wdOutlineLevel1 && FirstTitleCheck)
+
+                            if (FirstTitleCheck)
                             {
-                                Pg.SpaceBefore = 0.5f;
+                                if (PgLevel == Word.WdOutlineLevel.wdOutlineLevel1)
+                                {
+                                    Pg.SpaceBefore = 0;
+                                    Pg.LineUnitBefore = 0.5f;
+                                }
                             }
+                        }
+                    }
+
+                    //调整表格下一行间距
+                    if (TitleGroupCheck && FirstTitleCheck && i4 > 1)
+                    {
+                        if (WordDoc.Paragraphs[i4 - 1].Range.Information[Word.WdInformation.wdWithInTable])
+                        {
+                            Pg.SpaceBefore = 0;
+                            Pg.LineUnitBefore = 0.5f;
                         }
                     }
 
                     //显示进度
                     WordApp.StatusBar = "当前进度:" + Math.Round((i4*100d/i3),2) + "%";
-                    i4++;
+                    
                 }
             }
 
@@ -130,6 +157,10 @@ namespace HertZ_WordAddIn
         /// <param name="e"></param>
         private void TableFormat_Click(object sender, RibbonControlEventArgs e)
         {
+            //弹出窗体提示
+            DialogResult IsWait = MessageBox.Show("如果表格较多运行较为缓慢，进度可在Word左下角查看" + Environment.NewLine + "是否继续？", "请选择", MessageBoxButtons.YesNo);
+            if (IsWait != DialogResult.Yes) { return; }
+
             WordApp = Globals.ThisAddIn.Application;
             WordDoc = WordApp.ActiveDocument;
 
@@ -188,10 +219,13 @@ namespace HertZ_WordAddIn
                             WordApp.Selection.ParagraphFormat.CharacterUnitRightIndent = 0;
                             WordApp.Selection.ParagraphFormat.CharacterUnitFirstLineIndent = 0;
                         }
-                        WordApp.Selection.ParagraphFormat.SpaceBefore = float.Parse(TableBeforeMainBody.ToString());
-                        WordApp.Selection.ParagraphFormat.SpaceAfter = float.Parse(TableAfterMainBody.ToString());
+                        WordApp.Selection.ParagraphFormat.SpaceBefore = 0;
+                        WordApp.Selection.ParagraphFormat.LineUnitBefore = float.Parse(TableBeforeMainBody.ToString());
+                        WordApp.Selection.ParagraphFormat.SpaceAfter = 0;
+                        WordApp.Selection.ParagraphFormat.LineUnitAfter = float.Parse(TableAfterMainBody.ToString());
                         WordApp.Selection.ParagraphFormat.LineSpacing = WordApp.LinesToPoints(float.Parse(TableRowSpace.ToString()));
-                        WordApp.Selection.ParagraphFormat.DisableLineHeightGrid = 0;
+                        WordApp.Selection.ParagraphFormat.DisableLineHeightGrid = -1;//行距设置中，不勾选“如果定义了文档网格，则于网格对齐”
+                        WordApp.Selection.ParagraphFormat.AutoAdjustRightIndent = -1;//行距设置中，不勾选“如果定义了文档网格，则自动调整右缩进”
                     }
 
                     //边框
@@ -229,9 +263,10 @@ namespace HertZ_WordAddIn
                         {
 
                         }
-                        //
+                        //表格字体
                         Tb.Range.Font.Size = float.Parse(TableFontSize.ToString());
                     }
+
 
                     //显示进度
                     WordApp.StatusBar = "当前进度:" + Math.Round((i4 * 100d / i3), 2) + "%";
@@ -253,6 +288,13 @@ namespace HertZ_WordAddIn
             SettingFormatForm.Show();
         }
 
-
+        private void VerInfo_Click(object sender, RibbonControlEventArgs e)
+        {
+            Form InfoForm = new VerInfo
+            {
+                StartPosition = FormStartPosition.CenterScreen
+            };
+            InfoForm.Show();
+        }
     }
 }

@@ -100,8 +100,10 @@
   -->
   <ItemGroup>
     <Reference Include="Accessibility" />
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -156,6 +158,7 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="MainCode\GlobalFunC.cs" />
     <Compile Include="MainCode\ConfigFile.cs" />
     <Compile Include="HertZ_Ribbon.cs">
       <SubType>Component</SubType>
@@ -170,6 +173,12 @@
     <Compile Include="MyForm\MyProcessBar.Designer.cs">
       <DependentUpon>MyProcessBar.cs</DependentUpon>
     </Compile>
+    <Compile Include="MyForm\VerInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MyForm\VerInfo.Designer.cs">
+      <DependentUpon>VerInfo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -182,6 +191,9 @@
     <EmbeddedResource Include="MyForm\SettingFormatForm.resx">
       <DependentUpon>SettingFormatForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="MyForm\VerInfo.resx">
+      <DependentUpon>VerInfo.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -190,6 +202,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="HeWish.pfx" />
     <None Include="Properties\Settings.settings">
@@ -216,6 +229,9 @@
       <DependentUpon>ThisAddIn.Designer.xml</DependentUpon>
     </Compile>
     <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\HertZ_Logo.png" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

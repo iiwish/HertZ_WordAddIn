@@ -39,13 +39,17 @@
             this.TextFormat = this.Factory.CreateRibbonButton();
             this.TableFormat = this.Factory.CreateRibbonButton();
             this.SettingFormat = this.Factory.CreateRibbonButton();
+            this.VerGroup = this.Factory.CreateRibbonGroup();
+            this.VerInfo = this.Factory.CreateRibbonButton();
             this.HertZTab.SuspendLayout();
             this.Format.SuspendLayout();
+            this.VerGroup.SuspendLayout();
             this.SuspendLayout();
             // 
             // HertZTab
             // 
             this.HertZTab.Groups.Add(this.Format);
+            this.HertZTab.Groups.Add(this.VerGroup);
             this.HertZTab.Label = "HertZ";
             this.HertZTab.Name = "HertZTab";
             this.HertZTab.Position = this.Factory.RibbonPosition.AfterOfficeId("TabDeveloper");
@@ -87,6 +91,21 @@
             this.SettingFormat.ShowImage = true;
             this.SettingFormat.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.SettingFormat_Click);
             // 
+            // VerGroup
+            // 
+            this.VerGroup.Items.Add(this.VerInfo);
+            this.VerGroup.Name = "VerGroup";
+            // 
+            // VerInfo
+            // 
+            this.VerInfo.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.VerInfo.Image = global::HertZ_WordAddIn.Properties.Resources.HertZ_Logo;
+            this.VerInfo.Label = "版本信息";
+            this.VerInfo.Name = "VerInfo";
+            this.VerInfo.ScreenTip = "点击查看版本信息及使用说明";
+            this.VerInfo.ShowImage = true;
+            this.VerInfo.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.VerInfo_Click);
+            // 
             // HertZ_Ribbon
             // 
             this.Name = "HertZ_Ribbon";
@@ -97,6 +116,8 @@
             this.HertZTab.PerformLayout();
             this.Format.ResumeLayout(false);
             this.Format.PerformLayout();
+            this.VerGroup.ResumeLayout(false);
+            this.VerGroup.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -108,6 +129,8 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton TextFormat;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton TableFormat;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton SettingFormat;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup VerGroup;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton VerInfo;
     }
 
     partial class ThisRibbonCollection

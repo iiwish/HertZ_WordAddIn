@@ -84,6 +84,9 @@ namespace HertZ_WordAddIn
             TableAfterMainBody.Value = clsConfig.ReadConfig<decimal>("SettingFormatForm", "TableAfterMainBody", 0m);
             //行间距
             TableRowSpace.SelectedItem = clsConfig.ReadConfig<string>("SettingFormatForm", "TableRowSpace", "单倍行距");
+            //跳过的段数
+            SkipPgs.Value = clsConfig.ReadConfig<decimal>("SettingFormatForm", "SkipPgs", 0m);
+
 
             //表格边框
             BorderGroupCheck.Checked = clsConfig.ReadConfig<bool>("SettingFormatForm", "BorderGroupCheck", true);
@@ -141,6 +144,8 @@ namespace HertZ_WordAddIn
             clsConfig.WriteConfig("SettingFormatForm", "TableAfterMainBody", TableAfterMainBody.Value.ToString());
             //行间距
             clsConfig.WriteConfig("SettingFormatForm", "TableRowSpace", TableRowSpace.SelectedItem.ToString());
+            //跳过的段数
+            clsConfig.WriteConfig("SettingFormatForm", "SkipPgs", SkipPgs.Value.ToString());
 
             //表格边框
             clsConfig.WriteConfig("SettingFormatForm", "BorderGroupCheck", BorderGroupCheck.Checked.ToString());
