@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -62,6 +63,11 @@ namespace HertZ_WordAddIn
             return returnValue;
         }
 
+        /// <summary>
+        /// 将object转换为int
+        /// </summary>
+        /// <param name="Value"></param>
+        /// <returns></returns>
         public int TI(object Value)
         {
             int returnValue = 0;
@@ -74,5 +80,59 @@ namespace HertZ_WordAddIn
             return returnValue;
         }
 
+        /// <summary>
+        /// 返回Link域中的文件路径
+        /// </summary>
+        /// <param name="CodeText"></param>
+        /// <returns></returns>
+        public string LinkPath(string CodeText)
+        {
+            string TempStr = CodeText.Split('"')[0].Replace(" LINK Excel.Sheet.12 ", "");
+            TempStr = TempStr.Replace(@"\\", @"\");
+            return (TempStr.Substring(0,TempStr.Length-1));
+        }
+
+        /// <summary>
+        /// 返回Link域中的表格名称
+        /// </summary>
+        /// <param name="CodeText"></param>
+        /// <returns></returns>
+        public string LinkSheet(string CodeText)
+        {
+            string TempStr = CodeText.Split('"')[1];
+            return (TempStr.Split('!')[0]);
+        }
+
+        /// <summary>
+        /// 判断文件是否被占用
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public bool IsFileInUse(string fileName)
+        {
+            bool inUse = true;
+
+            FileStream fs = null;
+            try
+            {
+
+                fs = new FileStream(fileName, FileMode.Open, FileAccess.Read,
+
+                FileShare.None);
+
+                inUse = false;
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                if (fs != null)
+
+                    fs.Close();
+            }
+            return inUse;//true表示正在使用,false没有使用
+        }
     }
 }

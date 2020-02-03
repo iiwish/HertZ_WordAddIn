@@ -39,16 +39,21 @@
             this.TextFormat = this.Factory.CreateRibbonButton();
             this.TableFormat = this.Factory.CreateRibbonButton();
             this.SettingFormat = this.Factory.CreateRibbonButton();
+            this.JiuQi = this.Factory.CreateRibbonGroup();
+            this.ChangeExcelPath = this.Factory.CreateRibbonButton();
             this.VerGroup = this.Factory.CreateRibbonGroup();
             this.VerInfo = this.Factory.CreateRibbonButton();
+            this.UpdateLink = this.Factory.CreateRibbonButton();
             this.HertZTab.SuspendLayout();
             this.Format.SuspendLayout();
+            this.JiuQi.SuspendLayout();
             this.VerGroup.SuspendLayout();
             this.SuspendLayout();
             // 
             // HertZTab
             // 
             this.HertZTab.Groups.Add(this.Format);
+            this.HertZTab.Groups.Add(this.JiuQi);
             this.HertZTab.Groups.Add(this.VerGroup);
             this.HertZTab.Label = "HertZ";
             this.HertZTab.Name = "HertZTab";
@@ -91,6 +96,22 @@
             this.SettingFormat.ShowImage = true;
             this.SettingFormat.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.SettingFormat_Click);
             // 
+            // JiuQi
+            // 
+            this.JiuQi.Items.Add(this.ChangeExcelPath);
+            this.JiuQi.Items.Add(this.UpdateLink);
+            this.JiuQi.Label = "久其";
+            this.JiuQi.Name = "JiuQi";
+            // 
+            // ChangeExcelPath
+            // 
+            this.ChangeExcelPath.Label = "修改Excel路径";
+            this.ChangeExcelPath.Name = "ChangeExcelPath";
+            this.ChangeExcelPath.OfficeImageId = "AccessRelinkLists";
+            this.ChangeExcelPath.ScreenTip = "修改附注链接的Excel文件路径";
+            this.ChangeExcelPath.ShowImage = true;
+            this.ChangeExcelPath.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ChangeExcelPath_Click);
+            // 
             // VerGroup
             // 
             this.VerGroup.Items.Add(this.VerInfo);
@@ -106,6 +127,15 @@
             this.VerInfo.ShowImage = true;
             this.VerInfo.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.VerInfo_Click);
             // 
+            // UpdateLink
+            // 
+            this.UpdateLink.Label = "更新全部域";
+            this.UpdateLink.Name = "UpdateLink";
+            this.UpdateLink.OfficeImageId = "Refresh";
+            this.UpdateLink.ScreenTip = "点击刷新所有表格数据";
+            this.UpdateLink.ShowImage = true;
+            this.UpdateLink.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.UpdateLink_Click);
+            // 
             // HertZ_Ribbon
             // 
             this.Name = "HertZ_Ribbon";
@@ -116,6 +146,8 @@
             this.HertZTab.PerformLayout();
             this.Format.ResumeLayout(false);
             this.Format.PerformLayout();
+            this.JiuQi.ResumeLayout(false);
+            this.JiuQi.PerformLayout();
             this.VerGroup.ResumeLayout(false);
             this.VerGroup.PerformLayout();
             this.ResumeLayout(false);
@@ -131,6 +163,9 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton SettingFormat;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup VerGroup;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton VerInfo;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup JiuQi;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton ChangeExcelPath;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton UpdateLink;
     }
 
     partial class ThisRibbonCollection
