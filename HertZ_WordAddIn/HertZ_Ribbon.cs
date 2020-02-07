@@ -18,7 +18,6 @@ namespace HertZ_WordAddIn
         private Word.Document WordDoc;
 
         private Excel.Application ExcelApp;
-        private Excel.Worksheet WST;
 
         //引入调整格式用的函数模块
         private readonly FormatFunC FormatFunC = new FormatFunC();
@@ -279,6 +278,7 @@ namespace HertZ_WordAddIn
                     i4++;
                 }
             }
+
             WordApp.ScreenUpdating = true;//关闭屏幕刷新
         }
 
@@ -325,7 +325,6 @@ namespace HertZ_WordAddIn
 
             WordApp.ScreenUpdating = false;//关闭屏幕刷新
 
-            string TempStr;
             int i5 = WordDoc.Fields.Count;
             int i4 = 0;
             foreach (Word.Field TempField in WordDoc.Fields)
@@ -341,10 +340,8 @@ namespace HertZ_WordAddIn
                 }
 
                 //TempField.Locked = true;
+                TempField.LinkFormat.SourceFullName = ExcelApp.ActiveWorkbook.FullName;
 
-                TempStr = TempField.Code.Text;
-                TempField.Code.Text = " LINK Excel.Sheet.12 " + FilePath.Replace(@"\",@"\\") + " " + TempStr.Substring(TempStr.IndexOf('"'));
-                
                 //显示进度
                 WordApp.StatusBar = "当前进度:" + Math.Round((i4 * 100d / i5), 2) + "%";
             }
@@ -374,47 +371,25 @@ namespace HertZ_WordAddIn
             //WordDoc.Fields.Update();
             WordApp.ScreenUpdating = false;//关闭屏幕刷新
 
+            WordApp.StatusBar = "当前进度:0.00%";
+            
             string TempStr;
             //打开Excel文件
             foreach (Word.Field TempField in WordDoc.Fields)
             {
                 if (TempField.Type == Word.WdFieldType.wdFieldLink)
                 {
-                    TempStr = TempField.Code.Text;
-                    if (TempStr.Contains('"'))
+                    TempStr = TempField.LinkFormat.SourceFullName;
+                    //检查文件是否存在
+                    if (!File.Exists(TempStr))
                     {
-                        TempStr = FunC.LinkPath(TempStr);
-                        //检查文件是否存在
-                        if (!File.Exists(TempStr))
-                        {
-                            MessageBox.Show("未发现" + TempStr +"，请检查");
-                            return;
-                        }
-
-                        //if (FunC.IsFileInUse(TempStr))//如果目标文件已被打开
-                        //{
-                        //    ExcelApp = (Excel.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
-                        //    foreach(Excel.Workbook wbk in ExcelApp.Workbooks)
-                        //    {
-                        //        if(wbk.Name == Path.GetFileName(TempStr))
-                        //        {
-                        //            WBK = wbk;
-                        //            break;
-                        //        }
-                        //    }
-                        //    if(WBK == null)
-                        //    {
-                        //        MessageBox.Show("请检查久其文件是否在后台运行");
-                        //        return;
-                        //    }
-                        //}
-                        //else
-                        //{
-                            ExcelApp = new Excel.Application(); //引用Excel对象
-                            WBK = ExcelApp.Workbooks.Add(TempStr);
-                        //}
-                        break;
+                        MessageBox.Show("未发现" + TempStr +"，请检查");
+                        return;
                     }
+
+                    ExcelApp = new Excel.Application(); //引用Excel对象
+                    WBK = ExcelApp.Workbooks.Add(TempStr);
+                    break;
                 }
             }
 
@@ -426,7 +401,6 @@ namespace HertZ_WordAddIn
             }
             WBK.Close();
             ExcelApp.Quit();
-
 
             int i5 = WordDoc.Fields.Count;
             int i4 = 0;
@@ -462,7 +436,57 @@ namespace HertZ_WordAddIn
 
             MessageBox.Show("域更新完成！");
 
+        }
 
+        /// <summary>
+        /// 断开全部表格的域链接
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DiscAllLink_Click(object sender, RibbonControlEventArgs e)
+        {
+            //弹出窗体提示
+            DialogResult IsWait = MessageBox.Show("请在使用HertZ_Excel插件生成的Word附注中使用该功能" + Environment.NewLine + "是否继续？", "请选择", MessageBoxButtons.YesNo);
+            if (IsWait != DialogResult.Yes) { return; }
+
+            WordApp = Globals.ThisAddIn.Application;
+            WordDoc = WordApp.ActiveDocument;
+
+            int i5 = WordDoc.Fields.Count;
+            int i4 = 0;
+            //WordDoc.Fields.Update();
+            WordApp.ScreenUpdating = false;//关闭屏幕刷新
+            foreach (Word.Field TempField in WordDoc.Fields)
+            {
+                i4++;
+                if (TempField.Type != Word.WdFieldType.wdFieldLink)
+                {
+                    //显示进度
+                    WordApp.StatusBar = "当前进度:" + Math.Round((i4 * 100d / i5), 2) + "%";
+                    continue;
+                }
+
+                //断开链接
+                TempField.Unlink();
+                //显示进度
+                WordApp.StatusBar = "当前进度:" + Math.Round((i4 * 100d / i5), 2) + "%";
+            }
+
+            WordApp.ScreenUpdating = true;//打开屏幕刷新
+
+            MessageBox.Show("Link域已全部断开链接！");
+
+        }
+
+        /// <summary>
+        /// 断开当前表格的域链接
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DiscLink_Click(object sender, RibbonControlEventArgs e)
+        {
+            WordApp = Globals.ThisAddIn.Application;
+            WordDoc = WordApp.ActiveDocument;
         }
 
         private void VerInfo_Click(object sender, RibbonControlEventArgs e)
@@ -474,5 +498,6 @@ namespace HertZ_WordAddIn
             InfoForm.Show();
         }
 
+        
     }
 }

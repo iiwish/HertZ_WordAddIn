@@ -87,9 +87,9 @@ namespace HertZ_WordAddIn
         /// <returns></returns>
         public string LinkPath(string CodeText)
         {
-            string TempStr = CodeText.Split('"')[0].Replace(" LINK Excel.Sheet.12 ", "");
+            string TempStr = CodeText.Split('"')[1];
             TempStr = TempStr.Replace(@"\\", @"\");
-            return (TempStr.Substring(0,TempStr.Length-1));
+            return TempStr;
         }
 
         /// <summary>
@@ -99,8 +99,9 @@ namespace HertZ_WordAddIn
         /// <returns></returns>
         public string LinkSheet(string CodeText)
         {
-            string TempStr = CodeText.Split('"')[1];
-            return (TempStr.Split('!')[0]);
+            string TempStr = CodeText.Split('!')[0];//CodeText.Split('"')[3];
+            TempStr = TempStr.Substring(TempStr.LastIndexOf('"') + 1);
+            return TempStr;
         }
 
         /// <summary>

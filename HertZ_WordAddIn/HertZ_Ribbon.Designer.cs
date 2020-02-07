@@ -41,9 +41,11 @@
             this.SettingFormat = this.Factory.CreateRibbonButton();
             this.JiuQi = this.Factory.CreateRibbonGroup();
             this.ChangeExcelPath = this.Factory.CreateRibbonButton();
+            this.UpdateLink = this.Factory.CreateRibbonButton();
+            this.DiscAllLink = this.Factory.CreateRibbonSplitButton();
+            this.DiscLink = this.Factory.CreateRibbonButton();
             this.VerGroup = this.Factory.CreateRibbonGroup();
             this.VerInfo = this.Factory.CreateRibbonButton();
-            this.UpdateLink = this.Factory.CreateRibbonButton();
             this.HertZTab.SuspendLayout();
             this.Format.SuspendLayout();
             this.JiuQi.SuspendLayout();
@@ -100,6 +102,7 @@
             // 
             this.JiuQi.Items.Add(this.ChangeExcelPath);
             this.JiuQi.Items.Add(this.UpdateLink);
+            this.JiuQi.Items.Add(this.DiscAllLink);
             this.JiuQi.Label = "久其";
             this.JiuQi.Name = "JiuQi";
             // 
@@ -111,6 +114,34 @@
             this.ChangeExcelPath.ScreenTip = "修改附注链接的Excel文件路径";
             this.ChangeExcelPath.ShowImage = true;
             this.ChangeExcelPath.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ChangeExcelPath_Click);
+            // 
+            // UpdateLink
+            // 
+            this.UpdateLink.Label = "更新全部域";
+            this.UpdateLink.Name = "UpdateLink";
+            this.UpdateLink.OfficeImageId = "Refresh";
+            this.UpdateLink.ScreenTip = "点击刷新所有表格数据";
+            this.UpdateLink.ShowImage = true;
+            this.UpdateLink.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.UpdateLink_Click);
+            // 
+            // DiscAllLink
+            // 
+            this.DiscAllLink.Items.Add(this.DiscLink);
+            this.DiscAllLink.Label = "断开全部链接";
+            this.DiscAllLink.Name = "DiscAllLink";
+            this.DiscAllLink.OfficeImageId = "RecordsDeleteRecord";
+            this.DiscAllLink.ScreenTip = "点击断开全部表格的域链接";
+            this.DiscAllLink.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.DiscAllLink_Click);
+            // 
+            // DiscLink
+            // 
+            this.DiscLink.Label = "断开当前链接";
+            this.DiscLink.Name = "DiscLink";
+            this.DiscLink.OfficeImageId = "SlideDelete";
+            this.DiscLink.ScreenTip = "点击断开当前表格的域链接";
+            this.DiscLink.ShowImage = true;
+            this.DiscLink.Visible = false;
+            this.DiscLink.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.DiscLink_Click);
             // 
             // VerGroup
             // 
@@ -126,15 +157,6 @@
             this.VerInfo.ScreenTip = "点击查看版本信息及使用说明";
             this.VerInfo.ShowImage = true;
             this.VerInfo.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.VerInfo_Click);
-            // 
-            // UpdateLink
-            // 
-            this.UpdateLink.Label = "更新全部域";
-            this.UpdateLink.Name = "UpdateLink";
-            this.UpdateLink.OfficeImageId = "Refresh";
-            this.UpdateLink.ScreenTip = "点击刷新所有表格数据";
-            this.UpdateLink.ShowImage = true;
-            this.UpdateLink.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.UpdateLink_Click);
             // 
             // HertZ_Ribbon
             // 
@@ -166,6 +188,8 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup JiuQi;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton ChangeExcelPath;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton UpdateLink;
+        internal Microsoft.Office.Tools.Ribbon.RibbonSplitButton DiscAllLink;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton DiscLink;
     }
 
     partial class ThisRibbonCollection
