@@ -44,6 +44,7 @@
             this.UpdateLink = this.Factory.CreateRibbonButton();
             this.DiscAllLink = this.Factory.CreateRibbonSplitButton();
             this.DiscLink = this.Factory.CreateRibbonButton();
+            this.UpdateOneLink = this.Factory.CreateRibbonButton();
             this.VerGroup = this.Factory.CreateRibbonGroup();
             this.VerInfo = this.Factory.CreateRibbonButton();
             this.HertZTab.SuspendLayout();
@@ -100,6 +101,7 @@
             // 
             // JiuQi
             // 
+            this.JiuQi.Items.Add(this.UpdateOneLink);
             this.JiuQi.Items.Add(this.ChangeExcelPath);
             this.JiuQi.Items.Add(this.UpdateLink);
             this.JiuQi.Items.Add(this.DiscAllLink);
@@ -140,8 +142,17 @@
             this.DiscLink.OfficeImageId = "SlideDelete";
             this.DiscLink.ScreenTip = "点击断开当前表格的域链接";
             this.DiscLink.ShowImage = true;
-            this.DiscLink.Visible = false;
             this.DiscLink.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.DiscLink_Click);
+            // 
+            // UpdateOneLink
+            // 
+            this.UpdateOneLink.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.UpdateOneLink.Label = "更新当前域";
+            this.UpdateOneLink.Name = "UpdateOneLink";
+            this.UpdateOneLink.OfficeImageId = "AccessRefreshAllLists";
+            this.UpdateOneLink.ScreenTip = "点击更新当前表格数据";
+            this.UpdateOneLink.ShowImage = true;
+            this.UpdateOneLink.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.UpdateOneLink_Click);
             // 
             // VerGroup
             // 
@@ -190,6 +201,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton UpdateLink;
         internal Microsoft.Office.Tools.Ribbon.RibbonSplitButton DiscAllLink;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton DiscLink;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton UpdateOneLink;
     }
 
     partial class ThisRibbonCollection

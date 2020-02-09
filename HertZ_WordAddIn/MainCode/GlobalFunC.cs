@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace HertZ_WordAddIn
 {
@@ -81,14 +82,14 @@ namespace HertZ_WordAddIn
         }
 
         /// <summary>
-        /// 返回Link域中的文件路径
+        /// 返回Link域中的文件区域
         /// </summary>
         /// <param name="CodeText"></param>
         /// <returns></returns>
-        public string LinkPath(string CodeText)
+        public string LinkArea(string CodeText)
         {
-            string TempStr = CodeText.Split('"')[1];
-            TempStr = TempStr.Replace(@"\\", @"\");
+            string TempStr = CodeText.Split('!')[1];
+            TempStr = TempStr.Split('"')[0];
             return TempStr;
         }
 
@@ -135,5 +136,111 @@ namespace HertZ_WordAddIn
             }
             return inUse;//true表示正在使用,false没有使用
         }
+
+        /// <summary>
+        /// 判断工作表是否存在
+        /// </summary>
+        public bool SheetExist(Excel.Workbook wbk, string SheetName)
+        {
+            bool returnValue = false;
+
+            foreach(Excel.Worksheet wst in wbk.Worksheets)
+            {
+                if(wst.Name == SheetName)
+                {
+                    returnValue = true;
+                    break;
+                }
+            }
+
+            return returnValue;
+        }
+
+        /// <summary>
+        /// 返回指定列的行数
+        /// </summary>
+        public int AllRows(Excel.Worksheet wst,string ColumnName = "A", int ColumnsTotal = 1)
+        {
+            int returnValue = 0;
+            int StartColumn = CNumber(ColumnName);
+            int NewRows;
+            String Column;
+
+            for (int i = StartColumn; i < StartColumn + ColumnsTotal; i++)
+            {
+                Column = CName(i);
+                NewRows = ((Excel.Range)(wst.Cells[wst.Rows.Count, Column])).End[Excel.XlDirection.xlUp].Row;
+                returnValue = Math.Max(returnValue, NewRows);
+            }
+
+            return returnValue;
+        }
+
+        /// <summary>
+        /// 返回指定行的列数
+        /// </summary>
+        public int AllColumns(Excel.Worksheet wst,int RowName = 1, int RowsTotal = 1)
+        {
+            int returnValue = 0;
+            int NewColumns;
+
+            for (int i = RowName; i < RowName + RowsTotal; i++)
+            {
+                NewColumns = ((Excel.Range)(wst.Cells[i, "IV"])).End[Excel.XlDirection.xlToLeft].Column;
+                returnValue = Math.Max(returnValue, NewColumns);
+            }
+
+            return returnValue;
+        }
+
+        /// <summary>
+        /// 数字转列字母
+        /// </summary>
+        public string CName(int ColumnNumber)
+        {
+            int dividend = ColumnNumber;
+            string columnName = String.Empty;
+            int modulo;
+
+            while (dividend > 0)
+            {
+                modulo = (dividend - 1) % 26;
+                columnName = Convert.ToChar(65 + modulo).ToString() + columnName;
+                dividend = (int)((dividend - modulo) / 26);
+            }
+
+            return columnName;
+        }
+
+        /// <summary>
+        /// 列名转换数字
+        /// </summary>
+        public int CNumber(string ColumnName)
+        {
+            int index = 0;
+            char[] chars = ColumnName.ToUpper().ToCharArray();
+            for (int i = 0; i < chars.Length; i++)
+            {
+                index += ((int)chars[i] - (int)'A' + 1) * (int)Math.Pow(26, chars.Length - i - 1);
+            }
+            return index;
+        }
+
+        /// <summary>
+        /// 将object转换为string
+        /// </summary>
+        /// <param name="Value"></param>
+        /// <returns></returns>
+        public string TS(object Value)
+        {
+            string returnValue = "";
+            if (Value == null)
+            {
+                return returnValue;
+            }
+            returnValue = Value.ToString();
+            return returnValue;
+        }
+
     }
 }

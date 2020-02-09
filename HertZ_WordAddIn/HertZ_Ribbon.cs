@@ -9,6 +9,8 @@ using Excel = Microsoft.Office.Interop.Excel;
 using System.Threading;
 using Microsoft.VisualBasic;
 using System.IO;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace HertZ_WordAddIn
 {
@@ -367,14 +369,22 @@ namespace HertZ_WordAddIn
             WordDoc = WordApp.ActiveDocument;
 
             Excel.Workbook WBK = null;
+            Word.Table TempTable;
+            bool QuitExcel = false;
+            bool CloseWBK = false;
+            int ExcelRows;
+            int ExcelColumns;
+            int WordRows;
+            int WordColumns;
+            int TempInt;
 
             //WordDoc.Fields.Update();
             WordApp.ScreenUpdating = false;//关闭屏幕刷新
 
             WordApp.StatusBar = "当前进度:0.00%";
-            
-            string TempStr;
-            //打开Excel文件
+
+            string TempStr = null;
+            //检查Excel文件
             foreach (Word.Field TempField in WordDoc.Fields)
             {
                 if (TempField.Type == Word.WdFieldType.wdFieldLink)
@@ -386,21 +396,76 @@ namespace HertZ_WordAddIn
                         MessageBox.Show("未发现" + TempStr +"，请检查");
                         return;
                     }
-
-                    ExcelApp = new Excel.Application(); //引用Excel对象
-                    WBK = ExcelApp.Workbooks.Add(TempStr);
                     break;
                 }
             }
 
-            //遍历WBK工作表名，加入字典
-            Dictionary<string, bool> wstDic = new Dictionary<string, bool> { };
-            foreach(Excel.Worksheet wst in WBK.Worksheets)
+            if(TempStr == null) { MessageBox.Show("未发现表格域，请在久其生成的附注中使用该功能"); return; }
+
+            //获取区域的行列数
+            if (FunC.IsFileInUse(TempStr))//如果目标文件已被打开
             {
-                wstDic.Add(wst.Name, true);
+                try
+                {
+                    ExcelApp = (Excel.Application)Marshal.GetActiveObject("Excel.Application");
+                    WBK = ExcelApp.Workbooks[Path.GetFileName(TempStr)];
+                }
+                catch
+                {
+                    MessageBox.Show("链接的Excel文件已被后台程序打开，请检查并清理后台程序");
+                    return;
+                }
             }
-            WBK.Close();
-            ExcelApp.Quit();
+            else
+            {
+                CloseWBK = true;
+                try
+                {
+                    ExcelApp = (Excel.Application)Marshal.GetActiveObject("Excel.Application");
+                    QuitExcel = false;
+                }
+                catch
+                {
+                    //弹出窗体提示
+                    IsWait = MessageBox.Show("当前版本插件建议打开Excel程序再刷新域" + Environment.NewLine + "否则可能需要清理后台Excel程序，是否继续？", "请选择", MessageBoxButtons.YesNo);
+                    if (IsWait != DialogResult.Yes) { WordApp.ScreenUpdating = true; return; }
+
+                    ExcelApp = new Excel.Application();
+                    ExcelApp.Visible = false;
+                    QuitExcel = true;
+                }
+
+                WBK = ExcelApp.Workbooks.Open(TempStr);
+            }
+
+            //遍历WBK工作表名，加入字典
+            Dictionary<string, string> wstDic = new Dictionary<string, string> { };
+            object[,] ORG ;
+            foreach (Excel.Worksheet wst in WBK.Worksheets)
+            {
+                ExcelColumns = FunC.AllColumns(wst, 4, 2);
+                ExcelRows = FunC.AllRows(wst, "A", 2);
+                ORG = wst.Range["A1:A" + ExcelRows].Value2;
+                for(int i = ExcelRows; i > Math.Max(ExcelRows - 5, 4); i--)
+                {
+                    if(FunC.TS(ORG[i,1]).Contains("注：") || FunC.TS(ORG[i, 1]).Contains("注:"))
+                    {
+                        ExcelRows = i - 1;
+                    }
+                }
+
+                wstDic.Add(wst.Name, ExcelRows + ":" + ExcelColumns);
+            }
+
+            //关闭workbook
+            if (CloseWBK) { WBK.Close(); }
+            //退出Excel程序
+            if (QuitExcel)
+            {
+                ExcelApp.Visible = true;
+                ExcelApp.Quit();
+                ExcelApp = null;
+            }
 
             int i5 = WordDoc.Fields.Count;
             int i4 = 0;
@@ -416,14 +481,54 @@ namespace HertZ_WordAddIn
                     continue;
                 }
 
-                //TempField.Locked = true;
-
                 TempStr = TempField.Code.Text;
 
                 if (TempStr.Contains('"'))
                 {
                     if (wstDic.ContainsKey(FunC.LinkSheet(TempStr)))
                     {
+                        TempField.Select();
+                        TempTable = WordApp.Selection.Tables[1];
+                        WordRows = TempTable.Rows.Count;
+                        WordColumns = TempTable.Columns.Count;
+                        ExcelRows = int.Parse(wstDic[FunC.LinkSheet(TempStr)].Split(':')[0]);
+                        ExcelColumns = int.Parse(wstDic[FunC.LinkSheet(TempStr)].Split(':')[1]);
+
+                        TempInt = WordRows - ExcelRows;
+                        //检查行数
+                        if (TempInt < 0)
+                        {
+                            for (int i = 1; i <= Math.Abs(TempInt); i++)
+                            {
+                                TempTable.Cell(Math.Max(WordRows - 1, 1), 1).Range.Rows.Add(TempTable.Cell(Math.Max(WordRows - 1, 1), 1).Range.Rows);
+                            }
+                        }
+                        else if (TempInt > 0)
+                        {
+                            for (int i = TempInt; i >= 1; i--)
+                            {
+                                TempTable.Cell(Math.Max(WordRows - i, 1), 1).Range.Rows.Delete();
+                            }
+                        }
+
+                        TempInt = WordColumns - ExcelColumns;
+                        //检查列数
+                        if (TempInt < 0)
+                        {
+                            for (int i = 1; i <= Math.Abs(TempInt); i++)
+                            {
+                                TempTable.Cell(ExcelRows, Math.Max(WordColumns - 2, 1)).Range.Columns.Add(TempTable.Cell(ExcelRows, Math.Max(WordColumns - 2, 1)).Range.Columns);
+                            }
+                        }
+                        else if (TempInt > 0)
+                        {
+                            for (int i = TempInt; i >= 1; i--)
+                            {
+                                TempTable.Cell(ExcelRows, Math.Max(WordColumns - 1, 1)).Range.Columns.Delete();
+                            }
+                        }
+
+
                         TempField.Update();
                     }
                 }
@@ -487,8 +592,24 @@ namespace HertZ_WordAddIn
         {
             WordApp = Globals.ThisAddIn.Application;
             WordDoc = WordApp.ActiveDocument;
+
+            //选中整个表格
+            Word.Table TempTable = WordApp.Selection.Tables[1];
+            TempTable.Select();
+
+            //获取域
+            WordApp.Selection.Next(Word.WdUnits.wdWord, 2).Select();
+            WordApp.Selection.PreviousField();
+            WordApp.Selection.Fields[1].Unlink();
+
+            TempTable.Select();
         }
 
+        /// <summary>
+        /// 版本信息
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void VerInfo_Click(object sender, RibbonControlEventArgs e)
         {
             Form InfoForm = new VerInfo
@@ -498,6 +619,187 @@ namespace HertZ_WordAddIn
             InfoForm.Show();
         }
 
-        
+        /// <summary>
+        /// 刷新当前域
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void UpdateOneLink_Click(object sender, RibbonControlEventArgs e)
+        {
+            
+            WordApp = Globals.ThisAddIn.Application;
+            WordDoc = WordApp.ActiveDocument;
+
+            Word.Field TempField;
+            Word.Table TempTable;
+            int WordRows = 0;
+            int WordColumns = 0;
+            int ExcelRows  = 0;
+            int ExcelColumns = 0;
+            string TempStr;
+
+            //如果选中的区域不包含表格则退出
+            if (WordApp.Selection.Tables.Count == 0) { return; }
+
+            //如果选中的区域不在域中则退出
+            if (!WordApp.Selection.Information[Word.WdInformation.wdInFieldResult]) { return; }
+
+            WordApp.ScreenUpdating = false;//关闭屏幕刷新
+
+            //选中整个表格
+            TempTable = WordApp.Selection.Tables[1];
+            TempTable.Select();
+
+            //获取Word中表格行列数
+            WordRows = TempTable.Rows.Count;
+            WordColumns = TempTable.Columns.Count;
+
+            //获取域
+            WordApp.Selection.Next(Word.WdUnits.wdWord,2).Select();
+            WordApp.Selection.PreviousField();
+            TempField = WordApp.Selection.Fields[1];
+            
+            TempStr = TempField.LinkFormat.SourceFullName;
+
+            //检查文件是否存在
+            if (!File.Exists(TempStr))
+            {
+                MessageBox.Show("未发现域链接的Excel文件，请检查！");
+            }
+
+            Excel.Application ExcelApp = null;
+            Excel.Workbook WBK = null;
+            Excel.Worksheet WST = null;
+
+            //获取区域的行列数
+            if (FunC.IsFileInUse(TempStr))//如果目标文件已被打开
+            {
+                try
+                {
+                    ExcelApp = (Excel.Application)Marshal.GetActiveObject("Excel.Application");
+                    WBK = ExcelApp.Workbooks[Path.GetFileName(TempStr)];
+                }
+                catch
+                {
+                    MessageBox.Show("链接的Excel文件已被后台程序打开，请检查并清理后台程序");
+                    return;
+                }
+
+                //如果没有工作表
+                if (!FunC.SheetExist(WBK, FunC.LinkSheet(TempField.Code.Text)))
+                {
+                    MessageBox.Show("链接的Excel文件中未发现该工作表，请检查");
+                    return;
+                }
+
+                WST = WBK.Worksheets[FunC.LinkSheet(TempField.Code.Text)];
+
+                try
+                {
+                    ExcelRows = WST.Range[FunC.LinkArea(TempField.Code.Text)].Rows.Count;
+                    ExcelColumns = WST.Range[FunC.LinkArea(TempField.Code.Text)].Columns.Count;
+                }
+                catch
+                {
+                    MessageBox.Show("链接的Excel文件中未发现该域的命名区域，请检查");
+                    return;
+                }
+            }
+            else
+            {
+                bool QuitExcel;
+                try
+                {
+                    ExcelApp = (Excel.Application)Marshal.GetActiveObject("Excel.Application");
+                    QuitExcel = false;
+                }
+                catch
+                {
+                    //弹出窗体提示
+                    DialogResult IsWait = MessageBox.Show("当前版本插件建议打开Excel程序再刷新域" + Environment.NewLine + "否则可能需要清理后台Excel程序，是否继续？", "请选择", MessageBoxButtons.YesNo);
+                    if (IsWait != DialogResult.Yes) { WordApp.ScreenUpdating = true; return; }
+
+                    ExcelApp = new Excel.Application();
+                    ExcelApp.Visible = false;
+                    QuitExcel = true;
+                }
+
+                WBK = ExcelApp.Workbooks.Open(TempStr);
+                
+                //如果没有工作表
+                if (!FunC.SheetExist(WBK, FunC.LinkSheet(TempField.Code.Text)))
+                {
+                    MessageBox.Show("链接的Excel文件中未发现该工作表，请检查");
+                    return;
+                }
+
+                WST = WBK.Worksheets[FunC.LinkSheet(TempField.Code.Text)];
+
+                try
+                {
+                    ExcelRows = WST.Range[FunC.LinkArea(TempField.Code.Text)].Rows.Count;
+                    ExcelColumns = WST.Range[FunC.LinkArea(TempField.Code.Text)].Columns.Count;
+                }
+                catch
+                {
+                    MessageBox.Show("链接的Excel文件中未发现该域的命名区域，请检查");
+                    return;
+                }
+                
+                WBK.Close();
+                WBK = null;
+                WST = null;
+
+                //退出Excel程序
+                if (QuitExcel) 
+                {
+                    ExcelApp.Visible = true;
+                    ExcelApp.Quit();
+                    ExcelApp = null;
+                }
+
+            }
+
+            int TempInt = WordRows - ExcelRows;
+            //检查行数
+            if (TempInt < 0)
+            {
+                for (int i = 1; i <= Math.Abs(TempInt); i++)
+                {
+                    TempTable.Cell(Math.Max(WordRows - 1, 1), 1).Range.Rows.Add(TempTable.Cell(Math.Max(WordRows - 1, 1), 1).Range.Rows);
+                }
+            }
+            else if (TempInt > 0)
+            {
+                for (int i = TempInt; i >= 1; i--)
+                {
+                    TempTable.Cell(Math.Max(WordRows - i, 1), 1).Range.Rows.Delete();
+                }
+            }
+
+            TempInt = WordColumns - ExcelColumns;
+            //检查列数
+            if (TempInt < 0)
+            {
+                for (int i = 1; i <= Math.Abs(TempInt); i++)
+                {
+                    TempTable.Cell(ExcelRows, Math.Max(WordColumns - 2, 1)).Range.Columns.Add(TempTable.Cell(ExcelRows, Math.Max(WordColumns - 2, 1)).Range.Columns);
+                }
+            }
+            else if (TempInt > 0)
+            {
+                for (int i = TempInt; i >= 1; i--)
+                {
+                    TempTable.Cell(ExcelRows, Math.Max(WordColumns - 1, 1)).Range.Columns.Delete();
+                }
+            }
+
+            TempField.Update();
+
+            TempField.Select();
+
+            GC.Collect();
+            WordApp.ScreenUpdating = true;//打开屏幕刷新
+        }
     }
 }
