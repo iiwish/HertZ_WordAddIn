@@ -106,6 +106,51 @@ namespace HertZ_WordAddIn
         }
 
         /// <summary>
+        /// 返回Link域中的路径
+        /// </summary>
+        /// <param name="CodeText"></param>
+        /// <returns></returns>
+        public string LinkPath(string CodeText)
+        {
+            string TempStr;
+            if (CodeText.Length - CodeText.Replace("\"","").Length == 2)
+            {
+                TempStr = CodeText.Split('"')[0];
+                TempStr = TempStr.Substring(0, TempStr.Length - 1);
+                TempStr = TempStr.Replace(" LINK Excel.Sheet.12 ", "");
+                TempStr = TempStr.Replace(" LINK Excel.Sheet.8 ", "");
+                TempStr = TempStr.Replace(@"\\", @"\");
+            }
+            else
+            {
+                TempStr = CodeText.Split('"')[1];
+                TempStr = TempStr.Replace(@"\\", @"\");
+            }
+            return TempStr;
+        }
+
+        /// <summary>
+        /// 修改Link域中的路径
+        /// </summary>
+        /// <param name="CodeText"></param>
+        /// <returns></returns>
+        public string LinkPath(string CodeText,string NewPath)
+        {
+            string TempStr;
+            if (CodeText.Length - CodeText.Replace("\"", "").Length == 2)
+            {
+                TempStr = CodeText.Split('"')[1] + '"' + CodeText.Split('"')[2];
+                TempStr = " LINK Excel.Sheet.12 " + NewPath.Replace(@"\", @"\\") + " \"" + TempStr;
+            }
+            else
+            {
+                TempStr = CodeText.Split('"')[3] + '"' + CodeText.Split('"')[4];
+                TempStr = " LINK Excel.Sheet.12 " + NewPath.Replace(@"\", @"\\") + " \"" + TempStr;
+            }
+            return TempStr;
+        }
+
+        /// <summary>
         /// 判断文件是否被占用
         /// </summary>
         /// <param name="fileName"></param>

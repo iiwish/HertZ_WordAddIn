@@ -40,11 +40,11 @@
             this.TableFormat = this.Factory.CreateRibbonButton();
             this.SettingFormat = this.Factory.CreateRibbonButton();
             this.JiuQi = this.Factory.CreateRibbonGroup();
+            this.UpdateOneLink = this.Factory.CreateRibbonButton();
             this.ChangeExcelPath = this.Factory.CreateRibbonButton();
             this.UpdateLink = this.Factory.CreateRibbonButton();
             this.DiscAllLink = this.Factory.CreateRibbonSplitButton();
             this.DiscLink = this.Factory.CreateRibbonButton();
-            this.UpdateOneLink = this.Factory.CreateRibbonButton();
             this.VerGroup = this.Factory.CreateRibbonGroup();
             this.VerInfo = this.Factory.CreateRibbonButton();
             this.HertZTab.SuspendLayout();
@@ -108,6 +108,16 @@
             this.JiuQi.Label = "久其";
             this.JiuQi.Name = "JiuQi";
             // 
+            // UpdateOneLink
+            // 
+            this.UpdateOneLink.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.UpdateOneLink.Label = "更新当前域";
+            this.UpdateOneLink.Name = "UpdateOneLink";
+            this.UpdateOneLink.OfficeImageId = "AccessRefreshAllLists";
+            this.UpdateOneLink.ScreenTip = "点击更新当前表格数据";
+            this.UpdateOneLink.ShowImage = true;
+            this.UpdateOneLink.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.UpdateOneLink_Click);
+            // 
             // ChangeExcelPath
             // 
             this.ChangeExcelPath.Label = "修改Excel路径";
@@ -143,16 +153,6 @@
             this.DiscLink.ScreenTip = "点击断开当前表格的域链接";
             this.DiscLink.ShowImage = true;
             this.DiscLink.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.DiscLink_Click);
-            // 
-            // UpdateOneLink
-            // 
-            this.UpdateOneLink.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.UpdateOneLink.Label = "更新当前域";
-            this.UpdateOneLink.Name = "UpdateOneLink";
-            this.UpdateOneLink.OfficeImageId = "AccessRefreshAllLists";
-            this.UpdateOneLink.ScreenTip = "点击更新当前表格数据";
-            this.UpdateOneLink.ShowImage = true;
-            this.UpdateOneLink.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.UpdateOneLink_Click);
             // 
             // VerGroup
             // 

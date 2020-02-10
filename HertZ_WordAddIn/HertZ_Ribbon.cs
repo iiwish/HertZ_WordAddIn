@@ -11,6 +11,7 @@ using Microsoft.VisualBasic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Collections;
 
 namespace HertZ_WordAddIn
 {
@@ -333,19 +334,17 @@ namespace HertZ_WordAddIn
             {
                 i4++;
 
-                if(TempField.Type != Word.WdFieldType.wdFieldLink) 
+                if (TempField.Type != Word.WdFieldType.wdFieldLink)
                 {
                     //显示进度
                     WordApp.StatusBar = "当前进度:" + Math.Round((i4 * 100d / i5), 2) + "%";
-
-                    continue; 
                 }
-
-                //TempField.Locked = true;
-                TempField.LinkFormat.SourceFullName = ExcelApp.ActiveWorkbook.FullName;
-
-                //显示进度
-                WordApp.StatusBar = "当前进度:" + Math.Round((i4 * 100d / i5), 2) + "%";
+                else
+                {
+                    TempField.Code.Text = FunC.LinkPath(TempField.Code.Text,FilePath);
+                    //显示进度
+                    WordApp.StatusBar = "当前进度:" + Math.Round((i4 * 100d / i5), 2) + "%";
+                }
             }
 
             WordApp.ScreenUpdating = true;//打开屏幕刷新
@@ -389,7 +388,7 @@ namespace HertZ_WordAddIn
             {
                 if (TempField.Type == Word.WdFieldType.wdFieldLink)
                 {
-                    TempStr = TempField.LinkFormat.SourceFullName;
+                    TempStr = FunC.LinkPath(TempField.Code.Text);
                     //检查文件是否存在
                     if (!File.Exists(TempStr))
                     {
@@ -659,7 +658,7 @@ namespace HertZ_WordAddIn
             WordApp.Selection.PreviousField();
             TempField = WordApp.Selection.Fields[1];
             
-            TempStr = TempField.LinkFormat.SourceFullName;
+            TempStr = FunC.LinkPath(TempField.Code.Text);
 
             //检查文件是否存在
             if (!File.Exists(TempStr))
